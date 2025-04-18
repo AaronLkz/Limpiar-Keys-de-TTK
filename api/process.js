@@ -1,4 +1,4 @@
-// /api/process.js
+// /api/process.js ok
 import fetch from 'node-fetch'; // Necesario para hacer solicitudes HTTP
 
 export default async function handler(req, res) {
