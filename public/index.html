@@ -1,33 +1,38 @@
+<!-- /public/index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Enlace corto</title>
-</head>
-<body>
-  <input type="text" id="link" placeholder="Pega tu link" />
-  <button onclick="enviar()">Enviar</button>
-  <pre id="respuesta"></pre>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Limpiar Link TTK</title>
   <script>
-    async function enviar() {
+    async function handleSubmit(event) {
+      event.preventDefault();
+      
       const link = document.getElementById('link').value;
+      const response = await fetch('/api/process', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ link }),
+      });
 
-      try {
-        const res = await fetch('/api/process', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ link })
-        });
-
-        const data = await res.json();
-        document.getElementById('respuesta').textContent = JSON.stringify(data, null, 2);
-      } catch (e) {
-        document.getElementById('respuesta').textContent = 'Error al conectar con el servidor: ' + e.message;
+      const result = await response.json();
+      if (response.ok) {
+        alert(`Link procesado: ${result.linkProcesado}`);
+      } else {
+        alert(`Error: ${result.error}`);
       }
     }
   </script>
+</head>
+<body>
+  <h1>Limpiar Link TTK</h1>
+  <form id="linkForm" onsubmit="handleSubmit(event)">
+    <label for="link">Ingresa un link:</label>
+    <input type="text" id="link" name="link" required />
+    <button type="submit">Enviar</button>
+  </form>
 </body>
 </html>
