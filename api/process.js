@@ -1,3 +1,4 @@
+// /api/process.js
 export default async function handler(req, res) {
   // Verifica que la solicitud sea un POST
   if (req.method !== 'POST') {
